@@ -19,7 +19,7 @@
 
 AgreenaIPCC <- function(data, harvest_year, databases) {
   ### Data processing ---------------------------------------------------------
-  # Select target harvest year
+  # Select target harvest year #year
   data <- subset(data, actual_harvest_year == harvest_year)
 
   # Get predicted_areas based on field_id in the two tables
