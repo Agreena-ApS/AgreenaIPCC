@@ -14,7 +14,7 @@ AgreenaIPCC(data, harvest_year, databases)
 \item{databases}{Databases include necessary default values for the calculation}
 }
 \value{
-data_bsl_act Final result table
+A final result table
 }
 \description{
 AgreenaIPPC model
@@ -26,6 +26,7 @@ library(tidyr)
 setwd("G:/My Drive/Work/Projects/Models/IPCC model/20240222_R models/3_Model")
 data <- read.csv(file = "All_Baseline_field_data_aws_23.csv")
 harvest_year <- 2022
-databases <- "Databases.xlsx"
+databases <- "2022_Databases.xlsx"
 result <- AgreenaIPCC(data, harvest_year, databases)
+
 }

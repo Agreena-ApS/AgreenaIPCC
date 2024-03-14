@@ -4,7 +4,7 @@
 #' @param harvest_year Define the target harvest year
 #' @param databases Databases include necessary default values for the calculation
 #'
-#' @return data_bsl_act Final result table
+#' @return A final result table
 #'
 #' @examples
 #' library(readxl)
@@ -13,20 +13,23 @@
 #' setwd("G:/My Drive/Work/Projects/Models/IPCC model/20240222_R models/3_Model")
 #' data <- read.csv(file = "All_Baseline_field_data_aws_23.csv")
 #' harvest_year <- 2022
-#' databases <- "Databases.xlsx"
+#' databases <- "2022_Databases.xlsx"
 #' result <- AgreenaIPCC(data, harvest_year, databases)
+#'
+#' @import dplyr
+#' @import tidyr
+#' @import readxl
 #' @export
 
 AgreenaIPCC <- function(data, harvest_year, databases) {
   ### Data processing ---------------------------------------------------------
-  # Select target harvest year #year
+  # Select target harvest year
   data <- subset(data, actual_harvest_year == harvest_year)
 
   # Get predicted_areas based on field_id in the two tables
   # We don't have predicted_area for 2023.
   vvb_field_areas <- read_excel(databases, sheet = "VVB_Field areas_(LINKED)")
   data <- left_join(data, vvb_field_areas[, c("field_id", "predicted_area")], by = c("field_id" = "field_id"))
-
 
   ### Baseline ----------------------------------------------------------------
 
@@ -52,16 +55,6 @@ AgreenaIPCC <- function(data, harvest_year, databases) {
   # 0.002886 is the default value derived from the "CO2_fuel_emissions" table
   data_bsl$bsl_fuel_emissions <- 0.002886 * (data_bsl$field_def_energy_consumption_amount_ha)
 
-  # Check if energy_consumption_amount_ha 100 for conventional; 80 for reduced; 60 for no tilling. Yes
-  # colnames(data)
-  # unique(data$field_def_tilling)
-  # check_c <- subset(data, field_def_tilling == "Conventional tillage")
-  # unique(check_c$field_def_energy_consumption_amount_ha)
-  # check_r <- subset(data, field_def_tilling == "Reduced tillage")
-  # unique(check_r$field_def_energy_consumption_amount_ha)
-  # check_n <- subset(data, field_def_tilling == "No tillage")
-  # unique(check_n$field_def_energy_consumption_amount_ha)
-
   #### Baseline: CO2 emissions due to lime application  ------------------------
   # Obtain default values from the CO2_lime_emissions table
   # 2024 should have actual lime data
@@ -73,7 +66,6 @@ AgreenaIPCC <- function(data, harvest_year, databases) {
               by = c("field_def_country" = "field_def_country")
     ) %>%
     dplyr::select(everything(), "bsl_lime_emissions" = "2017_2021_baseline_lime_emissions_tCO2e/ha")
-
 
 
   ### Actual harvest year -----------------------------------------------------
@@ -95,11 +87,6 @@ AgreenaIPCC <- function(data, harvest_year, databases) {
 
   #### Actual: CO2 emissions due to fuel consumption ---------------------------
   # Obtain default values from the co2_fuel_emissions table
-
-  # There are some rows using "Bioethanol (L)" in 2023. However, the database doesn't have data for "Bioethanol (L)".
-  # check<-subset(dataset,actual_harvest_year==2023)
-  # unique(check$actual_energy_consumption_energy_source)
-
   co2_fuel_emissions <- read_excel(databases, sheet = "CO2_Fuel emissions")
   co2_fuel_emissions <- as.data.frame(co2_fuel_emissions)
   co2_fuel_emissions$EF <- as.numeric(co2_fuel_emissions$EF)
@@ -113,7 +100,6 @@ AgreenaIPCC <- function(data, harvest_year, databases) {
                                                    )
                                             )
   )
-
 
   #### Actual: CO2 emissions due to lime application ---------------------------
   # Obtain default values from the co2_lime_emissions table

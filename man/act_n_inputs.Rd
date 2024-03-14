@@ -18,5 +18,5 @@ data_act N inputs from fertilizers
 Actual N inputs from fertilizers
 }
 \examples{
-A
+None
 }

@@ -18,5 +18,5 @@ data final data
 N inputs in the baseline
 }
 \examples{
-A
+None
 }

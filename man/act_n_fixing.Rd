@@ -18,5 +18,5 @@ data_act final data
 N-fixing species
 }
 \examples{
-A
+None
 }
