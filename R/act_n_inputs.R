@@ -4,10 +4,10 @@
 #' @param databases Databases
 #'
 #' @return data_act N inputs from fertilizers
+#' @examples None
 #' @export
-#'
-#' @examples A
-act_fert_rates <- function(data, databases) {
+
+act_n_inputs <- function(data, databases) {
   # Separate values in column "actual_fertilisers_summary_names" based on semicolon delimiter
   # Be careful: more fertilizer names (I think mainly synthetic fertilizers but I am not sure) in other harvest years
 

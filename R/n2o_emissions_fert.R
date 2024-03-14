@@ -5,10 +5,10 @@
 #' @param databases Database
 #'
 #' @return data final data
-#' @export
-#'
 #' @examples A
-n2o_emissions_fert_cal <- function(data, scenario, databases) {
+#' @export
+
+n2o_emissions_fert <- function(data, scenario, databases) {
   emission_factors <- read_excel(databases, sheet = "N2O_Emission Factors")
   emission_factors <- as.data.frame(emission_factors)
   ef_n_direct <- emission_factors[1, "Value"]
@@ -37,18 +37,18 @@ n2o_emissions_fert_cal <- function(data, scenario, databases) {
   out <- processed_data %>%
     mutate(
 
-      # 44/28 is the conversion factor from N to n2o
-      # gwp_n2o is the conversion factor from n2o to CO2
+      # 44/28 is the conversion factor from N to N2O
+      # gwp_n2o is the conversion factor from N2O to CO2
 
-      # Direct n2o emissions
+      # Direct N2O emissions
       n2o_fert_direct = (fsn + fon) * ef_n_direct * (44 / 28) * gwp_n2o / area, # Eq.19
 
-      # Indirect n2o emissions
+      # Indirect N2O emissions
       n2o_fert_volat = (fsn * frac_gasf + fon * frac_gasm) * ef_n_volat * (44 / 28) * gwp_n2o, # Eq.23
       n2o_fert_leach = (fsn + fon) * frac_leach * ef_n_leach * (44 / 28) * gwp_n2o, # Eq.24
       n2o_fert_indirect = (n2o_fert_volat + n2o_fert_leach) / area, # Eq.22
 
-      # Total n2o emissions due to fertilizer use
+      # Total N2O emissions due to fertilizer use
       n2o_fert = n2o_fert_direct + n2o_fert_indirect,
     )
 

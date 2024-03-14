@@ -4,9 +4,10 @@
 #' @param databases Databases
 #'
 #' @return data_act final data
-#' @export
 #'
-#' @examples A
+#' @examples None
+#' @export
+
 act_n_fixing <- function(data, databases) {
   data_act <- data
 

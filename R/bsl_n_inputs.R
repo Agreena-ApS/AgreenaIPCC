@@ -4,11 +4,17 @@
 #' @param databases Databases
 #'
 #' @return data final data
-#' @export
 #'
-#' @examples A
-bsl_fert_rates <- function(data, databases) {
+#' @examples None
+#' @export
+
+bsl_n_inputs <- function(data, databases) {
   # Synthetic fertilizer application rate (msf) (t/ha) in the baseline
+
+  data$field_def_country_filter <- ifelse(data$field_def_country == "DK", "DK",
+                                          ifelse(data$field_def_country == "UK", "UK", "Other")
+  )
+
   # Use default values from the 'baseline_fertilizer' table
   baseline_fertilizers <- read_excel(databases, sheet = "N2O_baseline_fertiliser")
   baseline_fertilizers <- as.data.frame(baseline_fertilizers)
