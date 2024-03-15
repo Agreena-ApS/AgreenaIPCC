@@ -19,6 +19,3 @@ data final data
 \description{
 N2O emissions from soil
 }
-\examples{
-A
-}

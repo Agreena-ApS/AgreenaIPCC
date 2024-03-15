@@ -17,6 +17,3 @@ data final data
 \description{
 N inputs in the baseline
 }
-\examples{
-None
-}

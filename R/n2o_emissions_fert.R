@@ -5,19 +5,19 @@
 #' @param databases Database
 #'
 #' @return data final data
-#' @examples A
 #' @export
 
 n2o_emissions_fert <- function(data, scenario, databases) {
+  #data<-data_bsl
   emission_factors <- read_excel(databases, sheet = "N2O_Emission Factors")
   emission_factors <- as.data.frame(emission_factors)
-  ef_n_direct <- emission_factors[1, "Value"]
-  gwp_n2o <- emission_factors[7, "Value"]
-  frac_gasf <- emission_factors[8, "Value"]
-  frac_gasm <- emission_factors[9, "Value"]
-  ef_n_volat <- emission_factors[10, "Value"]
-  frac_leach <- emission_factors[12, "Value"]
-  ef_n_leach <- emission_factors[13, "Value"]
+  ef_n_direct <- emission_factors$Value[emission_factors$EF == "EF_N_direct" & emission_factors$Climate == "Default"]
+  gwp_n2o <- emission_factors$Value[emission_factors$EF == "GWP_N2O"]
+  frac_gasf <- emission_factors$Value[emission_factors$EF == "Frac_GASF"]
+  frac_gasm <- emission_factors$Value[emission_factors$EF == "Frac_GASM"]
+  ef_n_volat <- emission_factors$Value[emission_factors$EF == "EF_N_volat"]
+  frac_leach <- emission_factors$Value[emission_factors$EF == "Frac_leach" & emission_factors$Climate == "Moist"]
+  ef_n_leach <- emission_factors$Value[emission_factors$EF == "EF_N_leach"]
 
   if (scenario == "bsl") {
     fsn <- data$bsl_fsn
@@ -52,7 +52,7 @@ n2o_emissions_fert <- function(data, scenario, databases) {
       n2o_fert = n2o_fert_direct + n2o_fert_indirect,
     )
 
-  result <- out[, 5:9]
+  result <- out[, c("n2o_fert_direct", "n2o_fert_volat", "n2o_fert_leach", "n2o_fert_indirect", "n2o_fert")]
   colnames(result) <- paste0(scenario, "_", colnames(result))
   data <- cbind(data, result)
   return(data)

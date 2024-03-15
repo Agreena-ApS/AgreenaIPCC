@@ -17,6 +17,3 @@ data_act N inputs from fertilizers
 \description{
 Actual N inputs from fertilizers
 }
-\examples{
-None
-}

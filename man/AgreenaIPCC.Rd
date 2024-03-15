@@ -23,7 +23,7 @@ AgreenaIPPC model
 library(readxl)
 library(dplyr)
 library(tidyr)
-setwd("G:/My Drive/Work/Projects/Models/IPCC model/20240222_R models/3_Model")
+setwd("G:/My Drive/Work/Projects/Models/IPCC model/20240313_R package_2022")
 data <- read.csv(file = "All_Baseline_field_data_aws_23.csv")
 harvest_year <- 2022
 databases <- "2022_Databases.xlsx"

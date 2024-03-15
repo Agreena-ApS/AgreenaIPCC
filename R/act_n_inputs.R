@@ -4,7 +4,6 @@
 #' @param databases Databases
 #'
 #' @return data_act N inputs from fertilizers
-#' @examples None
 #' @export
 
 act_n_inputs <- function(data, databases) {

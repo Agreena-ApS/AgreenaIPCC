@@ -5,7 +5,6 @@
 #'
 #' @return data_act final data
 #'
-#' @examples None
 #' @export
 
 act_n_fixing <- function(data, databases) {
