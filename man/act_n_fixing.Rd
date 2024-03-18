@@ -12,7 +12,7 @@ act_n_fixing(data, databases)
 \item{databases}{Databases}
 }
 \value{
-data_act final data
+Final data
 }
 \description{
 N-fixing species

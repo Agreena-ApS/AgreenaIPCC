@@ -33,6 +33,7 @@ bsl_n_inputs <- function(data, databases) {
   data$bsl_ncsf <- ifelse(data$bsl_msf == 0, 0, 1)
 
   # N content of organic fertilizer (ncof) in the baseline
+  # We assumed that farmers applied pig slurry as organic fertilizer in the baseline
   data$bsl_ncof <- ifelse(data$bsl_mof == 0, 0, 0.0039)
 
   data <- data %>%

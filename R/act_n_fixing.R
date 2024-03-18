@@ -3,7 +3,7 @@
 #' @param data field data
 #' @param databases Databases
 #'
-#' @return data_act final data
+#' @return Final data
 #'
 #' @export
 
@@ -42,8 +42,9 @@ act_n_fixing <- function(data, databases) {
 
   emission_factors <- read_excel(databases, sheet = "N2O_Emission Factors")
   emission_factors <- as.data.frame(emission_factors)
-  ef_n_direct <- emission_factors[1, "Value"]
-  gwp_n2o <- emission_factors[7, "Value"]
+  ef_n_direct <- emission_factors$Value[emission_factors$EF == "EF_N_direct" & emission_factors$Climate == "Default"]
+  gwp_n2o <- emission_factors$Value[emission_factors$EF == "GWP_N2O"]
+
 
   data_act <- data_act %>%
     mutate(

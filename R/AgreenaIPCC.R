@@ -51,8 +51,6 @@ AgreenaIPCC <- function(data, harvest_year, databases) {
     )
 
   #### Baseline: CO2 emissions due to fuel consumption  ------------------------
-  data_bsl$bsl_fuel_emissions <- 0.002886 * (data_bsl$field_def_energy_consumption_amount_ha)
-
   co2_fuel_emissions <- read_excel(databases, sheet = "CO2_Fuel emissions")
   co2_fuel_emissions <- as.data.frame(co2_fuel_emissions)
 
@@ -78,11 +76,14 @@ AgreenaIPCC <- function(data, harvest_year, databases) {
   co2_lime_emissions <- read_excel(databases, sheet = "CO2_Lime emissions")
   co2_lime_emissions <- as.data.frame(co2_lime_emissions)
 
+  baseline_lime_emissions <- paste0((harvest_year - 5), "_", (harvest_year - 1), "_", "baseline_lime_emissions_tCO2e/ha")
+
+
   data_bsl <- data_bsl %>%
-    left_join(co2_lime_emissions[, c("field_def_country", "2017_2021_baseline_lime_emissions_tCO2e/ha")],
+    left_join(co2_lime_emissions[, c("field_def_country", baseline_lime_emissions)],
       by = c("field_def_country" = "field_def_country")
     ) %>%
-    dplyr::select(everything(), "bsl_lime_emissions" = "2017_2021_baseline_lime_emissions_tCO2e/ha")
+    dplyr::select(everything(), "bsl_lime_emissions" = all_of(baseline_lime_emissions))
 
 
   ### Actual harvest year -----------------------------------------------------
@@ -106,16 +107,21 @@ AgreenaIPCC <- function(data, harvest_year, databases) {
   # Obtain default values from the co2_fuel_emissions table
   co2_fuel_emissions <- read_excel(databases, sheet = "CO2_Fuel emissions")
   co2_fuel_emissions <- as.data.frame(co2_fuel_emissions)
-  co2_fuel_emissions$EF <- as.numeric(co2_fuel_emissions$EF)
 
+  # Obtain the default values of EFs according to the energy source
+  diesel <- co2_fuel_emissions$EF[co2_fuel_emissions$Energy_source == "Diesel (L)"]
+  petrol <- co2_fuel_emissions$EF[co2_fuel_emissions$Energy_source == "Petrol (L)"]
+  bioethanol <- co2_fuel_emissions$EF[co2_fuel_emissions$Energy_source == "Bioethanol (L)"]
+
+  # CO2 emissions (tCO2e/ha) = energy_consumption_amount_ha (L/ha) * EF (tCO2e/L)
   data_bsl_act$act_fuel_emissions <- ifelse(data_bsl_act$actual_energy_consumption_energy_source == "Diesel (L)",
-    (data_bsl_act$actual_energy_consumption_amount_ha) * co2_fuel_emissions[4, "EF"],
-    ifelse(data_bsl_act$actual_energy_consumption_energy_source == "Petrol (L)",
-      (data_bsl_act$actual_energy_consumption_amount_ha) * co2_fuel_emissions[5, "EF"],
-      ifelse(data_bsl_act$actual_energy_consumption_energy_source == "Bioethanol (L)",
-        (data_bsl_act$actual_energy_consumption_amount_ha) * co2_fuel_emissions[6, "EF"], NA
-      )
-    )
+                                        (data_bsl_act$actual_energy_consumption_amount_ha) * diesel,
+                                        ifelse(data_bsl_act$actual_energy_consumption_energy_source == "Petrol (L)",
+                                               (data_bsl_act$actual_energy_consumption_amount_ha) * petrol,
+                                               ifelse(data_bsl_act$actual_energy_consumption_energy_source == "Bioethanol (L)",
+                                                      (data_bsl_act$actual_energy_consumption_amount_ha) * bioethanol, NA
+                                               )
+                                        )
   )
 
   #### Actual: CO2 emissions due to lime application ---------------------------
@@ -125,9 +131,14 @@ AgreenaIPCC <- function(data, harvest_year, databases) {
   co2_lime_emissions <- read_excel(databases, sheet = "CO2_Lime emissions")
   co2_lime_emissions <- as.data.frame(co2_lime_emissions)
 
+  actual_lime_emissions <- paste0(harvest_year, "_actual_lime_emissions_tCO2e/ha")
+
+
   data_bsl_act <- data_bsl_act %>%
-    left_join(co2_lime_emissions[, c("field_def_country", "2022_actual_lime_emissions_tCO2e/ha")], by = c("field_def_country" = "field_def_country")) %>%
-    dplyr::select(everything(), "act_lime_emissions" = "2022_actual_lime_emissions_tCO2e/ha")
+    left_join(co2_lime_emissions[, c("field_def_country", actual_lime_emissions)],
+              by = c("field_def_country" = "field_def_country")
+    ) %>%
+    dplyr::select(everything(), "act_lime_emissions" = all_of(actual_lime_emissions))
 
   return(data_bsl_act)
 }
