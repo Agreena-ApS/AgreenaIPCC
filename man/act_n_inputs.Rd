@@ -12,7 +12,7 @@ act_n_inputs(data, databases)
 \item{databases}{Databases}
 }
 \value{
-data_act N inputs from fertilizers
+N inputs from synthetic and organic fertilizers
 }
 \description{
 Actual N inputs from fertilizers

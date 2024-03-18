@@ -8,7 +8,6 @@
 #' @export
 
 act_n_fixing <- function(data, databases) {
-  data_act <- data
 
   n_fixing_species <- read_excel(databases, sheet = "N2O_N_fixing")
   n_fixing_species <- as.data.frame(n_fixing_species)
@@ -28,7 +27,7 @@ act_n_fixing <- function(data, databases) {
 
   n_fixing_species$id <- ifelse(is.na(n_fixing_species$id), 0, n_fixing_species$id)
 
-  data_act <- data_act %>%
+  data <- data %>%
     left_join(
       n_fixing_species[, c(
         "n_fix", "id", "nag", "nbg", "ratio_above_product",
@@ -46,7 +45,7 @@ act_n_fixing <- function(data, databases) {
   gwp_n2o <- emission_factors$Value[emission_factors$EF == "GWP_N2O"]
 
 
-  data_act <- data_act %>%
+  data <- data %>%
     mutate(
       # N amount (t) in belowground biomass (MBbg)
       act_MBbg = ((actual_crop_gross_yield * 1000 * dry_product * slope + intercept) +
@@ -64,7 +63,7 @@ act_n_fixing <- function(data, databases) {
     )
   # Alfalfa deserves further attention
 
-  data_act$act_n2o_n_fix[is.na(data_act$act_n2o_n_fix)] <- 0
+  data$act_n2o_n_fix[is.na(data$act_n2o_n_fix)] <- 0
 
-  return(data_act)
+  return(data)
 }
