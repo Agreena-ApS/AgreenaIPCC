@@ -7,14 +7,14 @@
 AgreenaIPCC(data, harvest_year, databases)
 }
 \arguments{
-\item{data}{Field data from the platform}
+\item{data}{Field dataset that farmer reported at the platform}
 
 \item{harvest_year}{Define the target harvest year}
 
 \item{databases}{Databases include necessary default values for the calculation}
 }
 \value{
-A final result table
+A final IPCC result table including key results of baseline_fuel_emissions, actual_fuel_emissions, baseline_soil_n2o_emissions, actual_soil_n2o_emissions, baseline_lime_co2_emissions_(5y) and actual_lime_emissions
 }
 \description{
 AgreenaIPPC model

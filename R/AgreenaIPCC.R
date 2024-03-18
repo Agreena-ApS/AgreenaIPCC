@@ -1,10 +1,10 @@
 #' AgreenaIPPC model
 #'
-#' @param data Field data from the platform
+#' @param data Field dataset that farmer reported at the platform
 #' @param harvest_year Define the target harvest year
 #' @param databases Databases include necessary default values for the calculation
 #'
-#' @return A final result table
+#' @return A final IPCC result table including key results of baseline_fuel_emissions, actual_fuel_emissions, baseline_soil_n2o_emissions, actual_soil_n2o_emissions, baseline_lime_co2_emissions_(5y) and actual_lime_emissions
 #'
 #' @examples
 #' library(readxl)
@@ -47,7 +47,7 @@ AgreenaIPCC <- function(data, harvest_year, databases) {
   data_bsl <- data_bsl %>%
     mutate(
       bsl_n2o_n_fix = 0, # 2024 could have N-fixing species
-      bsl_n2o_soil = bsl_n2o_fert + bsl_n2o_n_fix # Eq.17
+      baseline_soil_n2o_emissions = bsl_n2o_fert + bsl_n2o_n_fix # Eq.17
     )
 
   #### Baseline: CO2 emissions due to fuel consumption  ------------------------
@@ -60,7 +60,7 @@ AgreenaIPCC <- function(data, harvest_year, databases) {
   bioethanol <- co2_fuel_emissions$EF[co2_fuel_emissions$Energy_source == "Bioethanol (L)"]
 
   # CO2 emissions (tCO2e/ha) = energy_consumption_amount_ha (L/ha) * EF (tCO2e/L)
-  data_bsl$bsl_fuel_emissions <- ifelse(data_bsl$field_def_energy_consumption_energy_source == "Diesel (L)",
+  data_bsl$baseline_fuel_emissions <- ifelse(data_bsl$field_def_energy_consumption_energy_source == "Diesel (L)",
     (data_bsl$field_def_energy_consumption_amount_ha) * diesel,
     ifelse(data_bsl$field_def_energy_consumption_energy_source == "Petrol (L)",
       (data_bsl$field_def_energy_consumption_amount_ha) * petrol,
@@ -83,7 +83,7 @@ AgreenaIPCC <- function(data, harvest_year, databases) {
     left_join(co2_lime_emissions[, c("field_def_country", baseline_lime_emissions)],
       by = c("field_def_country" = "field_def_country")
     ) %>%
-    dplyr::select(everything(), "bsl_lime_emissions" = all_of(baseline_lime_emissions))
+    dplyr::select(everything(), "baseline_lime_co2_emissions_(5y)" = all_of(baseline_lime_emissions))
 
 
   ### Actual harvest year -----------------------------------------------------
@@ -101,7 +101,7 @@ AgreenaIPCC <- function(data, harvest_year, databases) {
   data_bsl_act <- act_n_fixing(data_bsl_act, databases)
 
   # Soil N2O emissions = N2O emissions due to fertilizer use + N-fixing species
-  data_bsl_act$act_n2o_soil <- data_bsl_act$act_n2o_fert + data_bsl_act$act_n2o_n_fix
+  data_bsl_act$actual_soil_n2o_emissions <- data_bsl_act$act_n2o_fert + data_bsl_act$act_n2o_n_fix
 
   #### Actual: CO2 emissions due to fuel consumption ---------------------------
   # Obtain default values from the co2_fuel_emissions table
@@ -114,7 +114,7 @@ AgreenaIPCC <- function(data, harvest_year, databases) {
   bioethanol <- co2_fuel_emissions$EF[co2_fuel_emissions$Energy_source == "Bioethanol (L)"]
 
   # CO2 emissions (tCO2e/ha) = energy_consumption_amount_ha (L/ha) * EF (tCO2e/L)
-  data_bsl_act$act_fuel_emissions <- ifelse(data_bsl_act$actual_energy_consumption_energy_source == "Diesel (L)",
+  data_bsl_act$actual_fuel_emissions <- ifelse(data_bsl_act$actual_energy_consumption_energy_source == "Diesel (L)",
                                         (data_bsl_act$actual_energy_consumption_amount_ha) * diesel,
                                         ifelse(data_bsl_act$actual_energy_consumption_energy_source == "Petrol (L)",
                                                (data_bsl_act$actual_energy_consumption_amount_ha) * petrol,
@@ -138,7 +138,7 @@ AgreenaIPCC <- function(data, harvest_year, databases) {
     left_join(co2_lime_emissions[, c("field_def_country", actual_lime_emissions)],
               by = c("field_def_country" = "field_def_country")
     ) %>%
-    dplyr::select(everything(), "act_lime_emissions" = all_of(actual_lime_emissions))
+    dplyr::select(everything(), "actual_lime_emissions" = all_of(actual_lime_emissions))
 
   return(data_bsl_act)
 }
