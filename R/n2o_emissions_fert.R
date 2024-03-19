@@ -8,7 +8,7 @@
 #' @export
 
 n2o_emissions_fert <- function(data, scenario, databases) {
-  #data<-data_bsl
+  # data<-data_bsl
   emission_factors <- read_excel(databases, sheet = "N2O_Emission Factors")
   emission_factors <- as.data.frame(emission_factors)
   ef_n_direct <- emission_factors$Value[emission_factors$EF == "EF_N_direct" & emission_factors$Climate == "Default"]

@@ -12,13 +12,13 @@ act_n_inputs <- function(data, databases) {
 
   max_fert_number <- max(data$actual_fertilisers_count, na.rm = TRUE)
   data <- separate(data, "actual_fertilisers_summary_names",
-                       into = paste0("actual_fertilisers_summary_names", "_", 1:max_fert_number),
-                       sep = "; "
+    into = paste0("actual_fertilisers_summary_names", "_", 1:max_fert_number),
+    sep = "; "
   )
 
   data <- separate(data, "actual_fertilisers_summary_application_rates",
-                       into = paste0("actual_fertilisers_summary_application_rates", "_", 1:max_fert_number),
-                       sep = "; "
+    into = paste0("actual_fertilisers_summary_application_rates", "_", 1:max_fert_number),
+    sep = "; "
   )
 
   # Change all columns with "actual_fertilisers_summary_application_rates_" as numeric
@@ -46,7 +46,7 @@ act_n_inputs <- function(data, databases) {
       # Find the corresponding value in agreena_fertilizers table
       # If we have IDs for fertilizers in the field data table, we can change the codes here to make the matches between IDs
       matching_row <- which(agreena_fertilizers$`Current names (as on platform)`
-                            == data[i, paste0("actual_fertilisers_summary_names_", j)])
+      == data[i, paste0("actual_fertilisers_summary_names_", j)])
       if (length(matching_row) > 0) {
         # Assign the corresponding E value from agreena_fertilizers table to data
         data[i, paste0("act_ncof_", j)] <- agreena_fertilizers$N_frac[matching_row]
@@ -86,7 +86,7 @@ act_n_inputs <- function(data, databases) {
 
   data <- data %>%
     left_join(actual_n_application_rates[, c("field_id", "FSN")],
-              by = c("field_id" = "field_id")
+      by = c("field_id" = "field_id")
     ) %>%
     dplyr::select(everything(), act_fsn_kg_ha = FSN)
 

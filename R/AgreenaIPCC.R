@@ -10,10 +10,10 @@
 #' library(readxl)
 #' library(dplyr)
 #' library(tidyr)
-#' setwd("G:/My Drive/Work/Projects/Models/IPCC model/20240313_R package_2022")
+#' setwd("G:/My Drive/Work/Projects/Models/IPCC model/20240314_R package_2023")
 #' data <- read.csv(file = "All_Baseline_field_data_aws_23.csv")
-#' harvest_year <- 2022
-#' databases <- "2022_Databases.xlsx"
+#' harvest_year <- 2023
+#' databases <- "2023_Databases.xlsx"
 #' result <- AgreenaIPCC(data, harvest_year, databases)
 #'
 #' @import dplyr
@@ -28,8 +28,13 @@ AgreenaIPCC <- function(data, harvest_year, databases) {
 
   # Get predicted_areas based on field_id in the two tables
   # We don't have predicted_area for 2023.
-  vvb_field_areas <- read_excel(databases, sheet = "VVB_Field areas_(LINKED)")
-  data <- left_join(data, vvb_field_areas[, c("field_id", "predicted_area")], by = c("field_id" = "field_id"))
+  if (harvest_year == 2022) {
+    vvb_field_areas <- read_excel(databases, sheet = "VVB_Field areas_(LINKED)")
+    data <- left_join(data, vvb_field_areas[, c("field_id", "predicted_area")], by = c("field_id" = "field_id"))
+  } else {
+    data$predicted_area <- data$field_size_ha
+  }
+
 
   ### Baseline ----------------------------------------------------------------
 
@@ -73,11 +78,12 @@ AgreenaIPCC <- function(data, harvest_year, databases) {
   #### Baseline: CO2 emissions due to lime application  ------------------------
   # Obtain default values from the CO2_lime_emissions table
   # 2024 should have actual lime data (Farmers may or may not report them.)
+  # Lack of data for 10 fields in Serbia (RS) (Ask Macdara for help)
   co2_lime_emissions <- read_excel(databases, sheet = "CO2_Lime emissions")
   co2_lime_emissions <- as.data.frame(co2_lime_emissions)
 
-  baseline_lime_emissions <- paste0((harvest_year - 5), "_", (harvest_year - 1), "_", "baseline_lime_emissions_tCO2e/ha")
 
+  baseline_lime_emissions <- paste0((harvest_year - 5), "_", (harvest_year - 1), "_", "baseline_lime_emissions_tCO2e/ha")
 
   data_bsl <- data_bsl %>%
     left_join(co2_lime_emissions[, c("field_def_country", baseline_lime_emissions)],
@@ -91,7 +97,17 @@ AgreenaIPCC <- function(data, harvest_year, databases) {
   ##### Actual: Soil N2O emissions ----------------------------------------------
 
   # Calculate N inputs from synthetic and organic fertilizers
-  data_bsl_act <- act_n_inputs(data_bsl, databases)
+
+  if ("actual_fertilisers_summary_nitrogen_organic_kg_ha" %in% colnames(data_bsl)) {
+    data_bsl <- data_bsl %>%
+      mutate(
+        act_fsn = actual_fertilisers_summary_nitrogen_synthetic_kg_ha / 1000 * predicted_area,
+        act_fon = actual_fertilisers_summary_nitrogen_organic_kg_ha / 1000 * predicted_area
+      )
+  } else {
+    data_bsl_act <- act_n_inputs(data_bsl, databases)
+  }
+
 
   # N2O emissions due to fertilizer use
   scenario <- "act" # act means actual harvest year
@@ -115,13 +131,13 @@ AgreenaIPCC <- function(data, harvest_year, databases) {
 
   # CO2 emissions (tCO2e/ha) = energy_consumption_amount_ha (L/ha) * EF (tCO2e/L)
   data_bsl_act$actual_fuel_emissions <- ifelse(data_bsl_act$actual_energy_consumption_energy_source == "Diesel (L)",
-                                        (data_bsl_act$actual_energy_consumption_amount_ha) * diesel,
-                                        ifelse(data_bsl_act$actual_energy_consumption_energy_source == "Petrol (L)",
-                                               (data_bsl_act$actual_energy_consumption_amount_ha) * petrol,
-                                               ifelse(data_bsl_act$actual_energy_consumption_energy_source == "Bioethanol (L)",
-                                                      (data_bsl_act$actual_energy_consumption_amount_ha) * bioethanol, NA
-                                               )
-                                        )
+    (data_bsl_act$actual_energy_consumption_amount_ha) * diesel,
+    ifelse(data_bsl_act$actual_energy_consumption_energy_source == "Petrol (L)",
+      (data_bsl_act$actual_energy_consumption_amount_ha) * petrol,
+      ifelse(data_bsl_act$actual_energy_consumption_energy_source == "Bioethanol (L)",
+        (data_bsl_act$actual_energy_consumption_amount_ha) * bioethanol, NA
+      )
+    )
   )
 
   #### Actual: CO2 emissions due to lime application ---------------------------
@@ -133,10 +149,9 @@ AgreenaIPCC <- function(data, harvest_year, databases) {
 
   actual_lime_emissions <- paste0(harvest_year, "_actual_lime_emissions_tCO2e/ha")
 
-
   data_bsl_act <- data_bsl_act %>%
     left_join(co2_lime_emissions[, c("field_def_country", actual_lime_emissions)],
-              by = c("field_def_country" = "field_def_country")
+      by = c("field_def_country" = "field_def_country")
     ) %>%
     dplyr::select(everything(), "actual_lime_emissions" = all_of(actual_lime_emissions))
 
