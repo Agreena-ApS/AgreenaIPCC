@@ -13,7 +13,7 @@
 #' data <- read.csv(file = "G:/My Drive/Work/Projects/Models/IPCC model/20240314_R package_2023/All_Baseline_field_data_aws_23.csv")
 #' harvest_year <- 2023
 #' databases <- "G:/My Drive/Work/Projects/Models/IPCC model/20240314_R package_2023/2023_Databases.xlsx"
-#' result <- AgreenaIPCC(data, harvest_year, databases)
+#' result <- AgreenaIPCC(data, harvest_year, databases) #check
 #'
 #' @import dplyr
 #' @import tidyr
