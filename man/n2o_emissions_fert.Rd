@@ -2,20 +2,20 @@
 % Please edit documentation in R/n2o_emissions_fert.R
 \name{n2o_emissions_fert}
 \alias{n2o_emissions_fert}
-\title{N2O emissions from soil}
+\title{Calculation for N2O emissions from soil}
 \usage{
 n2o_emissions_fert(data, scenario, databases)
 }
 \arguments{
-\item{data}{field data}
+\item{data}{field dataset}
 
 \item{scenario}{Baseline or Actual harvest year}
 
-\item{databases}{Database}
+\item{databases}{Databases include necessary default values for the calculation}
 }
 \value{
-data final data
+Results of N2O emissions from soil
 }
 \description{
-N2O emissions from soil
+Calculation for N2O emissions from soil
 }

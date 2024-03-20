@@ -1,9 +1,9 @@
 #' N-fixing species
 #'
-#' @param data field data
-#' @param databases Databases
+#' @param data Field dataset
+#' @param databases Databases include necessary default values for the calculation
 #'
-#' @return Final data
+#' @return Results of N2O emissions due to the use of N-fixing species
 #'
 #' @export
 

@@ -1,6 +1,6 @@
-#' AgreenaIPPC model
+#' IPCC calculation for N2O emissions from soil, C2O emissions due to fuel consumption and lime application
 #'
-#' @param data Field dataset that farmer reported at the platform
+#' @param data Field dataset
 #' @param harvest_year Define the target harvest year
 #' @param databases Databases include necessary default values for the calculation
 #'
@@ -10,10 +10,9 @@
 #' library(readxl)
 #' library(dplyr)
 #' library(tidyr)
-#' setwd("G:/My Drive/Work/Projects/Models/IPCC model/20240314_R package_2023")
-#' data <- read.csv(file = "All_Baseline_field_data_aws_23.csv")
+#' data <- read.csv(file = "G:/My Drive/Work/Projects/Models/IPCC model/20240314_R package_2023/All_Baseline_field_data_aws_23.csv")
 #' harvest_year <- 2023
-#' databases <- "2023_Databases.xlsx"
+#' databases <- "G:/My Drive/Work/Projects/Models/IPCC model/20240314_R package_2023/2023_Databases.xlsx"
 #' result <- AgreenaIPCC(data, harvest_year, databases)
 #'
 #' @import dplyr
@@ -99,7 +98,7 @@ AgreenaIPCC <- function(data, harvest_year, databases) {
   # Calculate N inputs from synthetic and organic fertilizers
 
   if ("actual_fertilisers_summary_nitrogen_organic_kg_ha" %in% colnames(data_bsl)) {
-    data_bsl <- data_bsl %>%
+    data_bsl_act <- data_bsl %>%
       mutate(
         act_fsn = actual_fertilisers_summary_nitrogen_synthetic_kg_ha / 1000 * predicted_area,
         act_fon = actual_fertilisers_summary_nitrogen_organic_kg_ha / 1000 * predicted_area

@@ -1,9 +1,9 @@
 #' N inputs in the baseline
 #'
-#' @param data field data
-#' @param databases Databases
+#' @param data Field dataset
+#' @param databases Databases include necessary default values for the calculation
 #'
-#' @return data final data
+#' @return N inputs from synthetic and organic fertilizers in the baseline
 #'
 #' @export
 

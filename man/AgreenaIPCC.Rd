@@ -2,12 +2,12 @@
 % Please edit documentation in R/AgreenaIPCC.R
 \name{AgreenaIPCC}
 \alias{AgreenaIPCC}
-\title{AgreenaIPPC model}
+\title{IPCC calculation for N2O emissions from soil, C2O emissions due to fuel consumption and lime application}
 \usage{
 AgreenaIPCC(data, harvest_year, databases)
 }
 \arguments{
-\item{data}{Field dataset that farmer reported at the platform}
+\item{data}{Field dataset}
 
 \item{harvest_year}{Define the target harvest year}
 
@@ -17,16 +17,15 @@ AgreenaIPCC(data, harvest_year, databases)
 A final IPCC result table including key results of baseline_fuel_emissions, actual_fuel_emissions, baseline_soil_n2o_emissions, actual_soil_n2o_emissions, baseline_lime_co2_emissions_(5y) and actual_lime_emissions
 }
 \description{
-AgreenaIPPC model
+IPCC calculation for N2O emissions from soil, C2O emissions due to fuel consumption and lime application
 }
 \examples{
 library(readxl)
 library(dplyr)
 library(tidyr)
-setwd("G:/My Drive/Work/Projects/Models/IPCC model/20240314_R package_2023")
-data <- read.csv(file = "All_Baseline_field_data_aws_23.csv")
+data <- read.csv(file = "G:/My Drive/Work/Projects/Models/IPCC model/20240314_R package_2023/All_Baseline_field_data_aws_23.csv")
 harvest_year <- 2023
-databases <- "2023_Databases.xlsx"
+databases <- "G:/My Drive/Work/Projects/Models/IPCC model/20240314_R package_2023/2023_Databases.xlsx"
 result <- AgreenaIPCC(data, harvest_year, databases)
 
 }

@@ -1,9 +1,9 @@
-#' Actual N inputs from fertilizers
+#' N inputs from synthetic and organic fertilizers in the actual harvest year
 #'
-#' @param data Field data
-#' @param databases Databases
+#' @param data Field dataset
+#' @param databases Databases include necessary default values for the calculation
 #'
-#' @return N inputs from synthetic and organic fertilizers
+#' @return N inputs from synthetic and organic fertilizers in the actual harvest year
 #' @export
 
 act_n_inputs <- function(data, databases) {

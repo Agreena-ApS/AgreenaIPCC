@@ -1,10 +1,10 @@
-#' N2O emissions from soil
+#' Calculation for N2O emissions from soil
 #'
-#' @param data field data
+#' @param data field dataset
 #' @param scenario Baseline or Actual harvest year
-#' @param databases Database
+#' @param databases Databases include necessary default values for the calculation
 #'
-#' @return data final data
+#' @return Results of N2O emissions from soil
 #' @export
 
 n2o_emissions_fert <- function(data, scenario, databases) {

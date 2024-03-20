@@ -7,12 +7,12 @@
 act_n_fixing(data, databases)
 }
 \arguments{
-\item{data}{field data}
+\item{data}{Field dataset}
 
-\item{databases}{Databases}
+\item{databases}{Databases include necessary default values for the calculation}
 }
 \value{
-Final data
+Results of N2O emissions due to the use of N-fixing species
 }
 \description{
 N-fixing species

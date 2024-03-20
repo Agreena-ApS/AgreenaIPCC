@@ -2,18 +2,18 @@
 % Please edit documentation in R/act_n_inputs.R
 \name{act_n_inputs}
 \alias{act_n_inputs}
-\title{Actual N inputs from fertilizers}
+\title{N inputs from synthetic and organic fertilizers in the actual harvest year}
 \usage{
 act_n_inputs(data, databases)
 }
 \arguments{
-\item{data}{Field data}
+\item{data}{Field dataset}
 
-\item{databases}{Databases}
+\item{databases}{Databases include necessary default values for the calculation}
 }
 \value{
-N inputs from synthetic and organic fertilizers
+N inputs from synthetic and organic fertilizers in the actual harvest year
 }
 \description{
-Actual N inputs from fertilizers
+N inputs from synthetic and organic fertilizers in the actual harvest year
 }

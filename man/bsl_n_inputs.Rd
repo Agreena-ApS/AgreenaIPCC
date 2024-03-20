@@ -7,12 +7,12 @@
 bsl_n_inputs(data, databases)
 }
 \arguments{
-\item{data}{field data}
+\item{data}{Field dataset}
 
-\item{databases}{Databases}
+\item{databases}{Databases include necessary default values for the calculation}
 }
 \value{
-data final data
+N inputs from synthetic and organic fertilizers in the baseline
 }
 \description{
 N inputs in the baseline
