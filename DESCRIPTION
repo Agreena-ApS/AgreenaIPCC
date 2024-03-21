@@ -1,9 +1,9 @@
 Package: AgreenaIPCC
-Title: AgreenaIPCC
+Title: IPCC Calculation
 Version: 1.1.0
 Authors@R: 
     person("Yinqi", "Tang", , "yinqi.tang@agreena.com", role = c("aut", "cre"))
-Description: For IPCC calculation.
+Description: Functions to make the IPCC calculation for N2O emissions from soil, CO2 emissions due to fuel consumption and lime application.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)

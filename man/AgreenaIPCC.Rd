@@ -2,14 +2,14 @@
 % Please edit documentation in R/AgreenaIPCC.R
 \name{AgreenaIPCC}
 \alias{AgreenaIPCC}
-\title{IPCC calculation for N2O emissions from soil, C2O emissions due to fuel consumption and lime application}
+\title{IPCC Calculation}
 \usage{
 AgreenaIPCC(data, harvest_year, databases)
 }
 \arguments{
 \item{data}{Field dataset}
 
-\item{harvest_year}{Define the target harvest year}
+\item{harvest_year}{Target harvest year}
 
 \item{databases}{Databases include necessary default values for the calculation}
 }
@@ -17,7 +17,7 @@ AgreenaIPCC(data, harvest_year, databases)
 A final IPCC result table including key results of baseline_fuel_emissions, actual_fuel_emissions, baseline_soil_n2o_emissions, actual_soil_n2o_emissions, baseline_lime_co2_emissions_(5y) and actual_lime_emissions
 }
 \description{
-IPCC calculation for N2O emissions from soil, C2O emissions due to fuel consumption and lime application
+Main function to make the IPCC calculation for N2O emissions from soil, C2O emissions due to fuel consumption and lime application.
 }
 \examples{
 library(readxl)

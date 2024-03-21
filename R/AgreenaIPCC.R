@@ -1,7 +1,10 @@
-#' IPCC calculation for N2O emissions from soil, C2O emissions due to fuel consumption and lime application
+#' IPCC Calculation
+#'
+#' @description
+#' Main function to make the IPCC calculation for N2O emissions from soil, C2O emissions due to fuel consumption and lime application.
 #'
 #' @param data Field dataset
-#' @param harvest_year Define the target harvest year
+#' @param harvest_year Target harvest year
 #' @param databases Databases include necessary default values for the calculation
 #'
 #' @return A final IPCC result table including key results of baseline_fuel_emissions, actual_fuel_emissions, baseline_soil_n2o_emissions, actual_soil_n2o_emissions, baseline_lime_co2_emissions_(5y) and actual_lime_emissions
@@ -13,7 +16,7 @@
 #' data <- read.csv(file = "G:/My Drive/Work/Projects/Models/IPCC model/20240314_R package_2023/All_Baseline_field_data_aws_23.csv")
 #' harvest_year <- 2023
 #' databases <- "G:/My Drive/Work/Projects/Models/IPCC model/20240314_R package_2023/2023_Databases.xlsx"
-#' result <- AgreenaIPCC(data, harvest_year, databases) #check
+#' result <- AgreenaIPCC(data, harvest_year, databases)
 #'
 #' @import dplyr
 #' @import tidyr
