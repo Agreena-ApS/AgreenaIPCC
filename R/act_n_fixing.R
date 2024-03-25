@@ -1,15 +1,16 @@
 #' N-fixing species
 #'
 #' @param data Field dataset
+#' @param harvest_year Target harvest year
 #' @param databases Databases include necessary default values for the calculation
 #'
 #' @return Results of N2O emissions due to the use of N-fixing species
 #'
 #' @export
 
-act_n_fixing <- function(data, databases) {
+act_n_fixing <- function(data, harvest_year, databases) {
   # data <- data_bsl_act
-  n_fixing_species <- read_excel(databases, sheet = "N2O_N_fixing")
+  n_fixing_species <- readxl::read_excel(databases, sheet = "N2O_N_fixing")
   n_fixing_species <- as.data.frame(n_fixing_species)
 
   # check <- data_bsl_act[,52:56] %>%
@@ -40,7 +41,7 @@ act_n_fixing <- function(data, databases) {
   }
 
   n_fixing_species <- n_fixing_species %>%
-    rename(
+    dplyr::rename(
       n_fix = "N-fix",
       nag = "N content of above-ground residues (N AG(T))",
       nbg = "N content of below-ground residues (N BG(T))",
@@ -50,8 +51,11 @@ act_n_fixing <- function(data, databases) {
       intercept = "Intercept (T)"
     )
 
+  # act_crop_id <- unique(data[!is.na(data$actual_crop_type_id),]$actual_crop_type_id)
+  # stopifnot(act_crop_id %in% n_fixing_species$id)
+
   data <- data %>%
-    left_join(
+    dplyr::left_join(
       n_fixing_species[, c(
         "n_fix", "id", "nag", "nbg", "ratio_below_above", "dry_product", "slope", "intercept"
       )],
@@ -61,13 +65,13 @@ act_n_fixing <- function(data, databases) {
   # 2022 database: Same IDs correspond to different species in the N-fixing specie table
   # I have changed the names in Agreena crop identifier 2022 M2 of the N-fixing specie table to avoid duplicate name IDs
 
-  emission_factors <- read_excel(databases, sheet = "N2O_Emission Factors")
+  emission_factors <- readxl::read_excel(databases, sheet = "N2O_Emission Factors")
   emission_factors <- as.data.frame(emission_factors)
   ef_n_direct <- emission_factors$Value[emission_factors$EF == "EF_N_direct" & emission_factors$Climate == "Default"]
   gwp_n2o <- emission_factors$Value[emission_factors$EF == "GWP_N2O"]
 
   data <- data %>%
-    mutate(
+    dplyr::mutate(
       # N amount (t) in belowground biomass (MBbg)
       act_MBbg = ((actual_crop_gross_yield * 1000 * dry_product * slope + intercept) +
         actual_crop_gross_yield * 1000 * dry_product) / 1000 *

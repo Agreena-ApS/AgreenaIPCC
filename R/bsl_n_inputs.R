@@ -15,7 +15,7 @@ bsl_n_inputs <- function(data, databases) {
   )
 
   # Use default values from the 'baseline_fertilizer' table
-  baseline_fertilizers <- read_excel(databases, sheet = "N2O_baseline_fertiliser")
+  baseline_fertilizers <- readxl::read_excel(databases, sheet = "N2O_baseline_fertiliser")
   baseline_fertilizers <- as.data.frame(baseline_fertilizers)
 
   data <- merge(data, baseline_fertilizers,
@@ -37,7 +37,7 @@ bsl_n_inputs <- function(data, databases) {
   data$bsl_ncof <- ifelse(data$bsl_mof == 0, 0, 0.0039)
 
   data <- data %>%
-    mutate(
+    dplyr::mutate(
       bsl_fsn = bsl_msf * bsl_ncsf * predicted_area, # Eq.20
       bsl_fon = bsl_mof * bsl_ncof * predicted_area # Eq.21
     )

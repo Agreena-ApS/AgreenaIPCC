@@ -19,13 +19,3 @@ A final IPCC result table including key results of baseline_fuel_emissions, actu
 \description{
 Main function to make the IPCC calculation for N2O emissions from soil, C2O emissions due to fuel consumption and lime application.
 }
-\examples{
-library(readxl)
-library(dplyr)
-library(tidyr)
-data <- read.csv(file = "G:/My Drive/Work/Projects/Models/IPCC model/20240314_R package_2023/All_Baseline_field_data_aws_23.csv")
-harvest_year <- 2023
-databases <- "G:/My Drive/Work/Projects/Models/IPCC model/20240314_R package_2023/2023_Databases.xlsx"
-result <- AgreenaIPCC(data, harvest_year, databases)
-
-}

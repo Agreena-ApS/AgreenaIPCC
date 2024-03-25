@@ -4,10 +4,12 @@
 \alias{act_n_fixing}
 \title{N-fixing species}
 \usage{
-act_n_fixing(data, databases)
+act_n_fixing(data, harvest_year, databases)
 }
 \arguments{
 \item{data}{Field dataset}
+
+\item{harvest_year}{Target harvest year}
 
 \item{databases}{Databases include necessary default values for the calculation}
 }

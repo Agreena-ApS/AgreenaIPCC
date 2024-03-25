@@ -11,14 +11,14 @@ act_n_inputs <- function(data, databases) {
   # Be careful: more fertilizer names (I think mainly synthetic fertilizers but I am not sure) in other harvest years
 
   max_fert_number <- max(data$actual_fertilisers_count, na.rm = TRUE)
-  data <- separate(data, "actual_fertilisers_summary_names",
+  data <- tidyr::separate(data, "actual_fertilisers_summary_names",
     into = paste0("actual_fertilisers_summary_names", "_", 1:max_fert_number),
-    sep = "; "
+    sep = "; ", fill = "right"
   )
 
-  data <- separate(data, "actual_fertilisers_summary_application_rates",
+  data <- tidyr::separate(data, "actual_fertilisers_summary_application_rates",
     into = paste0("actual_fertilisers_summary_application_rates", "_", 1:max_fert_number),
-    sep = "; "
+    sep = "; ", fill = "right"
   )
 
   # Change all columns with "actual_fertilisers_summary_application_rates_" as numeric
@@ -27,7 +27,7 @@ act_n_inputs <- function(data, databases) {
   data[application_rates_columns] <- lapply(data[application_rates_columns], as.numeric)
 
   data <- data %>%
-    mutate(across(starts_with("actual_fertilisers_summary_application_rates_"), ~ ifelse(is.na(.), 0, .)))
+    dplyr::mutate(across(starts_with("actual_fertilisers_summary_application_rates_"), ~ ifelse(is.na(.), 0, .)))
 
   # Obtain N content of organic fertilizer 1-5, respectively,
   # Default value derived from agreena_fertilizers table
@@ -78,21 +78,17 @@ act_n_inputs <- function(data, databases) {
   data$act_fon_kg_ha <- (rowSums(data[, grepl("^act_fon_", names(data))])) * 1000 / (data$predicted_area)
 
   # We obtained N inputs from synthetic fertilizer from Constantine (Harvest year 2022)
-  # actual_n_application_rates table was from Constantine
-  # How should we obtained N inputs per hectare (kg/ha) from synthetic fertilizer for Harvest year 2023?
-
   actual_n_application_rates <- read_excel(databases, sheet = "N Rates_(LINKED)")
   actual_n_application_rates <- as.data.frame(actual_n_application_rates)
-
   data <- data %>%
-    left_join(actual_n_application_rates[, c("field_id", "FSN")],
+    dplyr::left_join(actual_n_application_rates[, c("field_id", "FSN")],
       by = c("field_id" = "field_id")
     ) %>%
     dplyr::select(everything(), act_fsn_kg_ha = FSN)
 
   # Total N inputs (tN) from synthetic and organic fertilizers in the fields
   data <- data %>%
-    mutate(
+    dplyr::mutate(
       act_FN_kg_ha = act_fon_kg_ha + act_fsn_kg_ha,
       act_fsn = act_fsn_kg_ha / 1000 * predicted_area,
       act_fon = act_fon_kg_ha / 1000 * predicted_area
