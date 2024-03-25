@@ -104,7 +104,6 @@ AgreenaIPCC <- function(data, harvest_year, databases) {
     data_bsl_act <- act_n_inputs(data_bsl, databases)
   }
 
-
   # N2O emissions due to fertilizer use
   scenario <- "act" # act means actual harvest year
   data_bsl_act <- n2o_emissions_fert(data_bsl_act, scenario, databases)

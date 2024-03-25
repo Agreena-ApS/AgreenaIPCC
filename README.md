@@ -26,9 +26,8 @@ This is a basic example which shows you how to solve a common problem:
 
 ``` r
 library(AgreenaIPCC)
-#setwd("Your_Work_Path")
 data <- example_data
-harvest_year <- 2023
-databases <- databases_2023
+harvest_year <- 2022
+databases <- databases_2022
 result <- AgreenaIPCC(data, harvest_year, databases)
 ```
