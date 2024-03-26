@@ -22,11 +22,11 @@ devtools::install_github("Agreena-ApS/AgreenaIPCC")
 
 ## Example
 
-This is a basic example which shows you how to solve a common problem:
+This is a basic example:
 
 ``` r
 library(AgreenaIPCC)
-data <- example_data
+data <- field_data
 harvest_year <- 2022
 databases <- databases_2022
 result <- AgreenaIPCC(data, harvest_year, databases)

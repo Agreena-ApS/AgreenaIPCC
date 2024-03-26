@@ -1,14 +1,16 @@
 test_that("Output of AgreenaIPCC() matches expected ERR22 results", {
-  data <- example_data
+  data <- read.csv(file = "G:/My Drive/Work/Projects/Models/IPCC model/20240314_R package_2023/All_Baseline_field_data_aws_23.csv")
+  example_data <- data[data$actual_harvest_year == 2022 & data$field_id %in% c(2874, 1753, 1691, 5168, 6893, 11401), ]
+  databases_2022 <- "G:/My Drive/Work/Projects/Models/IPCC model/20240313_R package_2022/2022_Databases.xlsx"
   harvest_year <- 2022
   databases <- databases_2022
-  result <- AgreenaIPCC(data, harvest_year, databases)
+
+  result <- AgreenaIPCC(example_data, harvest_year, databases)
   selected_result <- result[, c(
     "field_id", "baseline_soil_n2o_emissions", "baseline_fuel_emissions", "baseline_lime_co2_emissions_(5y)",
     "actual_soil_n2o_emissions", "actual_fuel_emissions", "actual_lime_emissions"
   )]
   colnames(selected_result)[colnames(selected_result) == "baseline_lime_co2_emissions_(5y)"] <- "baseline_lime_co2_emissions"
-
 
   # expected_result data are selected from Macdara' excel table for IPCC calculation 2022
   expected_result <- data.frame(
