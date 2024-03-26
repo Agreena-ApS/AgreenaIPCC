@@ -67,7 +67,7 @@ act_n_fixing <- function(data, harvest_year, databases) {
 
   emission_factors <- readxl::read_excel(databases, sheet = "N2O_Emission Factors")
   emission_factors <- as.data.frame(emission_factors)
-  ef_n_direct <- emission_factors$Value[emission_factors$EF == "EF_N_direct" & emission_factors$Climate == "Default"]
+  ef_n_direct <- emission_factors$Value[emission_factors$EF == "EF_N_direct" & emission_factors$Moist_Dry == "Default"]
   gwp_n2o <- emission_factors$Value[emission_factors$EF == "GWP_N2O"]
 
   data <- data %>%

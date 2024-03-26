@@ -26,8 +26,9 @@ This is a basic example:
 
 ``` r
 library(AgreenaIPCC)
-data <- field_data
+setwd("/path/to/your/directory")
+data <- read.csv(file = "Field dataset.csv")
+databases <- "2022_Databases.xlsx"
 harvest_year <- 2022
-databases <- databases_2022
 result <- AgreenaIPCC(data, harvest_year, databases)
 ```

@@ -11,12 +11,12 @@ n2o_emissions_fert <- function(data, scenario, databases) {
   #data <- data_bsl
   emission_factors <- readxl::read_excel(databases, sheet = "N2O_Emission Factors")
   emission_factors <- as.data.frame(emission_factors)
-  ef_n_direct <- emission_factors$Value[emission_factors$EF == "EF_N_direct" & emission_factors$Climate == "Default"]
+  ef_n_direct <- emission_factors$Value[emission_factors$EF == "EF_N_direct" & emission_factors$Moist_Dry == "Default"]
   gwp_n2o <- emission_factors$Value[emission_factors$EF == "GWP_N2O"]
   frac_gasf <- emission_factors$Value[emission_factors$EF == "Frac_GASF"]
   frac_gasm <- emission_factors$Value[emission_factors$EF == "Frac_GASM"]
   ef_n_volat <- emission_factors$Value[emission_factors$EF == "EF_N_volat"]
-  frac_leach <- emission_factors$Value[emission_factors$EF == "Frac_leach" & emission_factors$Climate == "Moist"]
+  frac_leach <- emission_factors$Value[emission_factors$EF == "Frac_leach" & emission_factors$Moist_Dry == "Moist"]
   ef_n_leach <- emission_factors$Value[emission_factors$EF == "EF_N_leach"]
 
   if (scenario == "bsl") {
